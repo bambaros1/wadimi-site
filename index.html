@@ -18,12 +18,10 @@
       --purple:#8e63ff;
       --purple2:#7d56ff;
 
-      /* spotlight position */
+      /* spotlight */
       --x:-500px;
       --y:-500px;
-
-      /* ✅ Spotlight size: كان 170px -> دابا ضعف */
-      --r:340px;
+      --r:340px; /* أكبر (ضعف القديم) */
     }
 
     *{box-sizing:border-box}
@@ -36,7 +34,7 @@
       background: var(--bg);
     }
 
-    /* ✅ Flashlight layer: الصورة كتظهر غير داخل الدائرة */
+    /* Flashlight reveals image ONLY under cursor */
     body::before{
       content:"";
       position:fixed;
@@ -59,7 +57,7 @@
         rgba(0,0,0,0) 74%);
     }
 
-    /* ✅ خلي خارج الدائرة أسود */
+    /* Outside stays dark */
     body::after{
       content:"";
       position:fixed;
@@ -69,7 +67,6 @@
       z-index:0;
     }
 
-    /* ✅ Glow رقيق حول الدائرة */
     .spot-glow{
       position:fixed;
       inset:0;
@@ -84,14 +81,13 @@
       opacity:.6;
     }
 
-    /* ✅ عرض طبيعي ديال المواقع + وسط الشاشة */
+    /* ✅ Fill screen width (no max-width) */
     .wrap{
       position:relative;
       z-index:2;
       min-height:100%;
-      max-width:1200px;
-      margin:0 auto;
-      padding:40px 18px 28px;
+      width:100%;
+      padding:40px 56px 28px;
     }
 
     /* Top bar */
@@ -100,6 +96,8 @@
       align-items:flex-start;
       justify-content:space-between;
       gap:24px;
+      position:relative;
+      z-index:3;
     }
 
     .logo{
@@ -114,6 +112,7 @@
     }
     .logo svg{width:100%;height:100%;display:block}
 
+    /* Desktop nav */
     nav{
       display:flex;
       gap:44px;
@@ -139,6 +138,55 @@
       opacity:.95;
     }
     nav a:hover{opacity:1}
+
+    /* Mobile hamburger button (hidden on desktop) */
+    .menu-btn{
+      display:none;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      box-shadow:0 18px 45px rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
+      color:#fff;
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+      margin-top:6px;
+    }
+    .menu-btn svg{width:22px;height:22px;fill:#fff;opacity:.95}
+
+    /* Mobile dropdown menu */
+    .mobile-menu{
+      display:none;
+      position:absolute;
+      top:62px;
+      right:0;
+      width:220px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(10,10,10,.86);
+      backdrop-filter: blur(10px);
+      box-shadow:0 22px 60px rgba(0,0,0,.65);
+      padding:10px;
+    }
+    .mobile-menu a{
+      display:block;
+      padding:12px 12px;
+      border-radius:12px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      opacity:.95;
+    }
+    .mobile-menu a:hover{background:rgba(255,255,255,.06);opacity:1}
+    .mobile-menu .active{
+      background:rgba(142,99,255,.20);
+      border:1px solid rgba(142,99,255,.35);
+    }
+
+    .mobile-menu.open{display:block}
 
     /* Main layout */
     .main{
@@ -182,7 +230,6 @@
       border:1px solid rgba(255,255,255,.08);
     }
 
-    /* Right shape */
     .shape{
       width:min(520px, 100%);
       aspect-ratio: 1 / 1;
@@ -205,7 +252,6 @@
     }
     .shape svg{width:100%;height:100%;display:block}
 
-    /* bottom social */
     .social{
       position:absolute;
       left:50%;
@@ -214,6 +260,7 @@
       display:flex;
       gap:14px;
       opacity:.92;
+      z-index:2;
     }
     .ic{
       width:30px;height:30px;
@@ -226,34 +273,63 @@
     }
     .ic svg{width:16px;height:16px;fill:#fff;opacity:.95}
 
-    /* ✅ Responsive */
-    @media (max-width: 980px){
+    /* ✅ Phone layout like your screenshot:
+       - logo top-left
+       - hamburger top-right
+       - items stacked
+       - big shape top, then text */
+    @media (max-width: 720px){
+      .wrap{padding:28px 18px 24px;}
+
+      nav{display:none;}              /* hide desktop nav */
+      .menu-btn{display:flex;}        /* show hamburger */
+
       .main{
         grid-template-columns:1fr;
-        margin-top:28px;
-        gap:28px;
+        margin-top:26px;
+        gap:22px;
       }
-      .left h1{font-size:56px}
-      nav{gap:16px}
+
+      /* Place shape first */
+      .right{order:1;}
+      .left{order:2; text-align:center;}
+
       .shape{
-        margin:18px auto 0;
-        width:min(460px, 92vw);
+        width:min(380px, 92vw);
+        margin:0 auto;
       }
-      /* Spotlight أصغر شوية فالموبايل باش يبقى طبيعي */
-      :root{ --r:260px; }
+
+      .left h1{
+        font-size:52px;
+        line-height:.95;
+        margin-top:8px;
+      }
+
+      .left p{
+        margin-left:auto;
+        margin-right:auto;
+        max-width:340px;
+        font-size:13px;
+        line-height:1.85;
+      }
+
+      .btn{height:46px; padding:0 22px;}
+
+      .social{
+        position:static;
+        transform:none;
+        justify-content:center;
+        margin-top:18px;
+      }
+
+      /* spotlight smaller on phone */
+      :root{ --r:220px; }
     }
 
-    @media (max-width: 560px){
-      .top{align-items:center}
-      nav{gap:12px}
-      nav a{font-size:14px}
-      .pill{padding:10px 16px; border-radius:12px}
-      .left h1{font-size:46px}
-      .left p{font-size:15px; line-height:1.8}
-      .btn{height:48px}
-      .logo{width:140px; height:78px}
-
-      :root{ --r:220px; }
+    @media (max-width: 420px){
+      .left h1{font-size:48px;}
+      .logo{width:140px;height:78px;}
+      :root{ --r:210px; }
     }
   </style>
 </head>
@@ -264,7 +340,6 @@
   <div class="wrap">
     <div class="top">
       <div class="logo" aria-label="logo">
-        <!-- placeholder landscape like screenshot -->
         <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -280,14 +355,29 @@
         </svg>
       </div>
 
-      <nav>
+      <!-- Desktop nav -->
+      <nav aria-label="desktop-nav">
         <span class="pill">Home</span>
         <a href="#project">Projet</a>
         <a href="#contact">Contact</a>
       </nav>
+
+      <!-- Mobile hamburger -->
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/>
+        </svg>
+      </button>
+
+      <!-- Mobile dropdown -->
+      <div class="mobile-menu" id="mobileMenu" aria-label="mobile-menu">
+        <a class="active" href="#home">Home</a>
+        <a href="#project">Projet</a>
+        <a href="#contact">Contact</a>
+      </div>
     </div>
 
-    <div class="main">
+    <div class="main" id="home">
       <div class="left">
         <h1>COMPANY<br/>OVERVIEW</h1>
         <p>
@@ -335,21 +425,43 @@
   </div>
 
   <script>
-    // Spotlight follows mouse (only). On touch: hide.
+    // Spotlight follows mouse only
     const root = document.documentElement;
 
     function move(e){
       root.style.setProperty('--x', e.clientX + 'px');
       root.style.setProperty('--y', e.clientY + 'px');
     }
-
     window.addEventListener('mousemove', move, { passive:true });
 
-    // hide on touch devices
+    // hide spotlight on touch
     window.addEventListener('touchstart', () => {
       root.style.setProperty('--x', '-500px');
       root.style.setProperty('--y', '-500px');
     }, { passive:true });
+
+    // Mobile menu toggle
+    const btn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+
+    function closeMenu(){
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = menu.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', closeMenu);
+    menu.addEventListener('click', (e) => e.stopPropagation());
+
+    // close on resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 720) closeMenu();
+    });
   </script>
 </body>
 </html>
