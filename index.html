@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Company Overview</title>
 
-  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -21,7 +20,7 @@
       /* spotlight */
       --x:-500px;
       --y:-500px;
-      --r:340px; /* أكبر (ضعف القديم) */
+      --r:340px; /* bigger */
     }
 
     *{box-sizing:border-box}
@@ -31,10 +30,10 @@
       font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       overflow-x:hidden;
-      background: var(--bg);
+      background:var(--bg);
     }
 
-    /* Flashlight reveals image ONLY under cursor */
+    /* Spotlight image reveal (only inside circle) */
     body::before{
       content:"";
       position:fixed;
@@ -57,7 +56,7 @@
         rgba(0,0,0,0) 74%);
     }
 
-    /* Outside stays dark */
+    /* Keep outside dark */
     body::after{
       content:"";
       position:fixed;
@@ -67,27 +66,42 @@
       z-index:0;
     }
 
+    /* ✅ Stronger flashlight glow */
     .spot-glow{
       position:fixed;
       inset:0;
       pointer-events:none;
       z-index:1;
+
       background:
-        radial-gradient(circle calc(var(--r) + 38px) at var(--x) var(--y),
-          rgba(142,99,255,.14) 0%,
-          rgba(142,99,255,.08) 36%,
-          rgba(0,0,0,0) 72%);
+        radial-gradient(circle calc(var(--r) + 80px) at var(--x) var(--y),
+          rgba(142,99,255,.22) 0%,
+          rgba(142,99,255,.16) 22%,
+          rgba(142,99,255,.10) 40%,
+          rgba(142,99,255,.05) 58%,
+          rgba(0,0,0,0) 76%),
+        radial-gradient(circle calc(var(--r) + 28px) at var(--x) var(--y),
+          rgba(255,255,255,.10) 0%,
+          rgba(255,255,255,.05) 30%,
+          rgba(0,0,0,0) 62%);
       mix-blend-mode:screen;
-      opacity:.6;
+      opacity:1;
+      filter: blur(2px);
     }
 
-    /* ✅ Fill screen width (no max-width) */
+    /* ✅ Global website container + full height */
     .wrap{
       position:relative;
       z-index:2;
-      min-height:100%;
+      min-height:100vh;
       width:100%;
-      padding:40px 56px 28px;
+      padding:40px 24px 28px;
+
+      max-width:1200px; /* global */
+      margin:0 auto;
+
+      display:flex;
+      flex-direction:column;
     }
 
     /* Top bar */
@@ -98,6 +112,7 @@
       gap:24px;
       position:relative;
       z-index:3;
+      flex:0 0 auto;
     }
 
     .logo{
@@ -139,7 +154,7 @@
     }
     nav a:hover{opacity:1}
 
-    /* Mobile hamburger button (hidden on desktop) */
+    /* Mobile hamburger */
     .menu-btn{
       display:none;
       width:44px;
@@ -157,7 +172,6 @@
     }
     .menu-btn svg{width:22px;height:22px;fill:#fff;opacity:.95}
 
-    /* Mobile dropdown menu */
     .mobile-menu{
       display:none;
       position:absolute;
@@ -185,16 +199,16 @@
       background:rgba(142,99,255,.20);
       border:1px solid rgba(142,99,255,.35);
     }
-
     .mobile-menu.open{display:block}
 
-    /* Main layout */
+    /* Main desktop */
     .main{
       display:grid;
       grid-template-columns: 1.2fr 1fr;
       gap:56px;
       align-items:center;
       margin-top:62px;
+      flex:1 1 auto;
     }
 
     .left h1{
@@ -253,14 +267,12 @@
     .shape svg{width:100%;height:100%;display:block}
 
     .social{
-      position:absolute;
-      left:50%;
-      bottom:22px;
-      transform:translateX(-50%);
       display:flex;
+      justify-content:center;
       gap:14px;
       opacity:.92;
-      z-index:2;
+      margin-top:18px;
+      flex:0 0 auto;
     }
     .ic{
       width:30px;height:30px;
@@ -273,63 +285,70 @@
     }
     .ic svg{width:16px;height:16px;fill:#fff;opacity:.95}
 
-    /* ✅ Phone layout like your screenshot:
-       - logo top-left
-       - hamburger top-right
-       - items stacked
-       - big shape top, then text */
+    /* ✅ Mobile: stack + distribute space (no big empty bottom) */
     @media (max-width: 720px){
-      .wrap{padding:28px 18px 24px;}
+      :root{ --r:220px; }
 
-      nav{display:none;}              /* hide desktop nav */
-      .menu-btn{display:flex;}        /* show hamburger */
-
-      .main{
-        grid-template-columns:1fr;
-        margin-top:26px;
-        gap:22px;
+      .wrap{
+        padding:22px 18px 18px;
       }
 
-      /* Place shape first */
-      .right{order:1;}
-      .left{order:2; text-align:center;}
+      nav{display:none;}
+      .menu-btn{display:flex;}
+
+      .main{
+        display:flex;
+        flex-direction:column;
+        flex:1 1 auto;
+        margin-top:14px;
+        gap:0;
+
+        justify-content:space-evenly;
+        align-items:center;
+        text-align:center;
+      }
+
+      .right{order:1; width:100%; display:flex; justify-content:center;}
+      .left{order:2; width:100%;}
 
       .shape{
         width:min(380px, 92vw);
-        margin:0 auto;
+        max-height:42vh;
+        aspect-ratio:1/1;
+        margin:0;
       }
 
       .left h1{
-        font-size:52px;
+        margin:0;
+        font-size:clamp(40px, 9.5vw, 58px);
         line-height:.95;
-        margin-top:8px;
       }
 
       .left p{
-        margin-left:auto;
-        margin-right:auto;
-        max-width:340px;
-        font-size:13px;
+        margin:0;
+        max-width:360px;
+        font-size:clamp(12px, 3.4vw, 14px);
         line-height:1.85;
+        padding:0 8px;
       }
 
-      .btn{height:46px; padding:0 22px;}
-
-      .social{
-        position:static;
-        transform:none;
-        justify-content:center;
-        margin-top:18px;
+      .btn{
+        height:46px;
+        padding:0 22px;
+        margin-top:12px;
       }
 
-      /* spotlight smaller on phone */
-      :root{ --r:220px; }
+      .social{margin-top:10px;}
     }
 
     @media (max-width: 420px){
-      .left h1{font-size:48px;}
-      .logo{width:140px;height:78px;}
       :root{ --r:210px; }
+      .logo{width:140px;height:78px}
+      .shape{max-height:40vh}
+    }
+
+    @media (min-width: 1400px){
+      .wrap{max-width:1280px;}
     }
   </style>
 </head>
@@ -355,21 +374,18 @@
         </svg>
       </div>
 
-      <!-- Desktop nav -->
       <nav aria-label="desktop-nav">
         <span class="pill">Home</span>
         <a href="#project">Projet</a>
         <a href="#contact">Contact</a>
       </nav>
 
-      <!-- Mobile hamburger -->
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"/>
         </svg>
       </button>
 
-      <!-- Mobile dropdown -->
       <div class="mobile-menu" id="mobileMenu" aria-label="mobile-menu">
         <a class="active" href="#home">Home</a>
         <a href="#project">Projet</a>
@@ -427,7 +443,6 @@
   <script>
     // Spotlight follows mouse only
     const root = document.documentElement;
-
     function move(e){
       root.style.setProperty('--x', e.clientX + 'px');
       root.style.setProperty('--y', e.clientY + 'px');
@@ -440,7 +455,7 @@
       root.style.setProperty('--y', '-500px');
     }, { passive:true });
 
-    // Mobile menu toggle
+    // Mobile menu
     const btn = document.getElementById('menuBtn');
     const menu = document.getElementById('mobileMenu');
 
@@ -457,8 +472,6 @@
 
     document.addEventListener('click', closeMenu);
     menu.addEventListener('click', (e) => e.stopPropagation());
-
-    // close on resize to desktop
     window.addEventListener('resize', () => {
       if (window.innerWidth > 720) closeMenu();
     });
