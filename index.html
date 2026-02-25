@@ -1,244 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Company Overview</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
+  <style>
+    :root{
+      --bg:#050505;
+      --text:#ffffff;
+      --muted:rgba(255,255,255,.82);
+      --purple:#8e63ff;
+      --purple2:#7d56ff;
 
-body{
-    background: linear-gradient(135deg,#0b1120,#0f172a);
-    color:white;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-}
-
-.container{
-    width:90%;
-    max-width:1200px;
-    background: rgba(255,255,255,0.02);
-    backdrop-filter: blur(10px);
-    border-radius:20px;
-    padding:40px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    box-shadow:0 0 40px rgba(0,194,255,0.1);
-}
-
-/* NAV */
-nav{
-    position:absolute;
-    top:30px;
-    left:50%;
-    transform:translateX(-50%);
-    width:90%;
-    max-width:1200px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.logo{
-    font-weight:700;
-    font-size:22px;
-}
-
-nav ul{
-    display:flex;
-    gap:30px;
-    list-style:none;
-}
-
-nav ul li{
-    cursor:pointer;
-    transition:.3s;
-}
-
-nav ul li:hover{
-    color:#00c2ff;
-}
-
-/* LEFT SIDE */
-.left{
-    width:50%;
-}
-
-.left h1{
-    font-size:48px;
-    font-weight:800;
-}
-
-.left h2{
-    color:#00c2ff;
-    margin-top:10px;
-    font-weight:600;
-}
-
-.left p{
-    margin-top:20px;
-    color:#cbd5e1;
-    line-height:1.6;
-}
-
-.buttons{
-    margin-top:30px;
-    display:flex;
-    gap:20px;
-}
-
-.btn-primary{
-    background:#00c2ff;
-    padding:12px 28px;
-    border:none;
-    border-radius:8px;
-    color:#000;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.btn-primary:hover{
-    box-shadow:0 0 20px #00c2ff;
-}
-
-.btn-outline{
-    background:transparent;
-    padding:12px 28px;
-    border:2px solid #00c2ff;
-    border-radius:8px;
-    color:#00c2ff;
-    font-weight:600;
-    cursor:pointer;
-    transition:.3s;
-}
-
-.btn-outline:hover{
-    background:#00c2ff;
-    color:black;
-}
-
-/* SOCIAL */
-.social{
-    margin-top:40px;
-    display:flex;
-    gap:20px;
-}
-
-.social a{
-    width:40px;
-    height:40px;
-    border:2px solid #00c2ff;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#00c2ff;
-    text-decoration:none;
-    transition:.3s;
-}
-
-.social a:hover{
-    background:#00c2ff;
-    color:black;
-    box-shadow:0 0 15px #00c2ff;
-}
-
-/* RIGHT SIDE */
-.right{
-    width:45%;
-    position:relative;
-}
-
-.right img{
-    width:100%;
-    border-radius:20px;
-    filter:brightness(0.8);
-}
-
-/* Glow Effect */
-.right::before{
-    content:'';
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:120%;
-    height:120%;
-    background: radial-gradient(circle,#00c2ff55,transparent 60%);
-    z-index:-1;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-    .container{
-        flex-direction:column;
-        text-align:center;
+      /* spotlight */
+      --x:-200px;
+      --y:-200px;
+      --r:170px;   /* radius */
     }
-    .left,.right{
-        width:100%;
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 900px at 20% 30%, rgba(255,255,255,.03), transparent 55%),
+                  radial-gradient(800px 600px at 70% 80%, rgba(142,99,255,.06), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
     }
-    .buttons{
-        justify-content:center;
+
+    /* Flashlight layer: reveals ONLY under cursor */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:url("https://selfmadewebdesigner.com/wp-content/uploads/2022/01/the-best-way-to-learn-web-development-in-2022-without-getting-stuck.jpg");
+      background-size:cover;
+      background-position:center;
+      filter:saturate(1.05) contrast(1.03);
+      opacity:.95;
+      pointer-events:none;
+      z-index:0;
+
+      /* show image only inside the circle */
+      -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,1) 35%,
+        rgba(0,0,0,0) 72%);
+      mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,1) 35%,
+        rgba(0,0,0,0) 72%);
     }
+
+    /* Darken everything overall (so outside spotlight stays black) */
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.86);
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* Subtle ring glow of flashlight */
+    .spot-glow{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+      background:
+        radial-gradient(circle calc(var(--r) + 26px) at var(--x) var(--y),
+          rgba(142,99,255,.10) 0%,
+          rgba(142,99,255,.06) 32%,
+          rgba(0,0,0,0) 70%);
+      mix-blend-mode:screen;
+      opacity:.55;
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100%;
+      padding:40px 56px 28px;
+    }
+
+    /* Top bar */
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:24px;
+    }
+
+    .logo{
+      width:165px;
+      height:86px;
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 18px 45px rgba(0,0,0,.55);
+      background:#0e0e0e;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    /* simple landscape placeholder like screenshot */
+    .logo svg{width:100%;height:100%;display:block}
+
+    nav{
+      display:flex;
+      gap:44px;
+      align-items:center;
+      padding-top:6px;
+    }
+
+    .pill{
+      background:var(--purple);
+      color:#fff;
+      padding:12px 22px;
+      border-radius:12px;
+      font-weight:700;
+      box-shadow:0 10px 24px rgba(142,99,255,.25);
+    }
+    nav a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:.2px;
+      opacity:.95;
+    }
+    nav a:hover{opacity:1}
+
+    /* Main layout */
+    .main{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:56px;
+      align-items:center;
+      margin-top:62px;
+    }
+
+    .left h1{
+      margin:0 0 18px;
+      font-size:84px;
+      line-height:.92;
+      letter-spacing:1px;
+      font-weight:800;
+      text-transform:uppercase;
+    }
+
+    .left p{
+      margin:0 0 26px;
+      max-width:520px;
+      color:var(--muted);
+      font-weight:300;
+      line-height:1.9;
+      font-size:16px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:52px;
+      padding:0 28px;
+      border-radius:14px;
+      background:var(--purple2);
+      color:#fff;
+      font-weight:800;
+      text-decoration:none;
+      box-shadow:0 12px 28px rgba(142,99,255,.22);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    /* Right big shape */
+    .shape{
+      width:min(520px, 100%);
+      aspect-ratio: 1 / 1;
+      margin-left:auto;
+      border-radius:44px;
+      overflow:hidden;
+      box-shadow:0 22px 70px rgba(0,0,0,.62);
+      border:1px solid rgba(255,255,255,.08);
+
+      /* make it “rounded hex-ish” like screenshot */
+      clip-path: polygon(
+        14% 6%,
+        72% 6%,
+        94% 28%,
+        94% 72%,
+        72% 94%,
+        14% 94%,
+        6% 72%,
+        6% 28%
+      );
+      background:#0b0b0b;
+    }
+    .shape svg{width:100%;height:100%;display:block}
+
+    /* bottom social */
     .social{
-        justify-content:center;
+      position:absolute;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      display:flex;
+      gap:14px;
+      opacity:.92;
     }
-}
-</style>
+    .ic{
+      width:30px;height:30px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      backdrop-filter: blur(6px);
+    }
+    .ic svg{width:16px;height:16px;fill:#fff;opacity:.95}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .wrap{padding:26px 22px 22px}
+      .main{grid-template-columns:1fr; margin-top:28px}
+      .left h1{font-size:62px}
+      nav{gap:22px}
+      .shape{margin:28px auto 0}
+    }
+  </style>
 </head>
-
 <body>
+  <div class="spot-glow"></div>
 
-<nav>
-    <div class="logo">Jacob.</div>
-    <ul>
-        <li>Home</li>
-        <li>About</li>
-        <li>Services</li>
-        <li>Portfolio</li>
-        <li>Contact</li>
-    </ul>
-</nav>
+  <div class="wrap">
+    <div class="top">
+      <div class="logo" aria-label="logo">
+        <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#dff2ff"/>
+              <stop offset="1" stop-color="#ffffff"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="210" fill="url(#sky)"/>
+          <path d="M0,150 C70,120 120,120 200,150 C280,180 330,180 400,150 L400,210 L0,210 Z" fill="#b7d673"/>
+          <path d="M0,160 C90,130 140,135 210,160 C290,190 330,190 400,160 L400,210 L0,210 Z" fill="#7ea90a"/>
+          <path d="M55 70 a18 18 0 0 1 18-18 h38 a18 18 0 0 1 18 18 v6 h-74z" fill="#ffffff" opacity=".85"/>
+          <path d="M235 65 a18 18 0 0 1 18-18 h55 a18 18 0 0 1 18 18 v8 h-91z" fill="#ffffff" opacity=".75"/>
+        </svg>
+      </div>
 
-<div class="container">
+      <nav>
+        <span class="pill">Home</span>
+        <a href="#project">Projet</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
 
-    <div class="left">
-        <h1>Hi, I'm Your Name</h1>
-        <h2>Frontend Developer</h2>
+    <div class="main">
+      <div class="left">
+        <h1>COMPANY<br/>OVERVIEW</h1>
         <p>
-            I build modern, high-performance websites with clean UI and smooth user experience.
-            Passionate about design, code quality and digital innovation.
+          Wardiere, Inc. was founded in 2009 with the vision of providing cutting-edge technology solutions.
+          Our core areas include software development, cybersecurity, AI integration, and IT consulting.
+          We are committed to excellence and innovation.
         </p>
+        <a class="btn" href="#contact">Contact</a>
+      </div>
 
-        <div class="buttons">
-            <button class="btn-primary">Hire Me</button>
-            <button class="btn-outline">Let's Talk</button>
+      <div class="right">
+        <div class="shape" aria-label="illustration">
+          <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#bfe9ff"/>
+                <stop offset="0.55" stop-color="#e8f7ff"/>
+                <stop offset="1" stop-color="#ffffff"/>
+              </linearGradient>
+            </defs>
+            <rect width="600" height="600" fill="url(#g)"/>
+            <path d="M0,430 C120,390 220,400 310,430 C410,465 510,468 600,438 L600,600 L0,600 Z" fill="#b7d673"/>
+            <path d="M0,455 C140,410 250,420 340,455 C445,496 520,502 600,470 L600,600 L0,600 Z" fill="#7ea90a"/>
+            <g opacity=".95">
+              <path d="M200 220 a70 70 0 0 1 70-70 h75 a80 80 0 0 1 80 80 v10 h-225z" fill="#ffffff"/>
+              <circle cx="270" cy="210" r="58" fill="#ffffff"/>
+              <circle cx="355" cy="200" r="64" fill="#ffffff"/>
+            </g>
+          </svg>
         </div>
-
-        <div class="social">
-            <a href="#">F</a>
-            <a href="#">T</a>
-            <a href="#">in</a>
-        </div>
+      </div>
     </div>
 
-    <div class="right">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e" alt="Profile">
+    <div class="social" aria-label="social">
+      <a class="ic" href="#" aria-label="facebook" title="facebook">
+        <svg viewBox="0 0 24 24"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v3H7v3h3v6h3v-6h3l1-3h-4v-3c0-.6.4-1 1-1z"/></svg>
+      </a>
+      <a class="ic" href="#" aria-label="x" title="x">
+        <svg viewBox="0 0 24 24"><path d="M18.9 3H21l-6.6 7.5L22 21h-6.3l-4-5-4.4 5H3.1l7.1-8L2 3h6.4l3.6 4.6L18.9 3zm-2.2 16h1.8L7.2 4.9H5.3L16.7 19z"/></svg>
+      </a>
+      <a class="ic" href="#" aria-label="telegram" title="telegram">
+        <svg viewBox="0 0 24 24"><path d="M21.7 4.3c.4.2.4.8.1 1.3l-3.2 15c-.1.6-.8.9-1.3.6l-5.2-3.1-2.5 2.4c-.4.4-1.1.2-1.2-.4l-.5-4 12-11.2-14.7 9c-.5.3-1.1 0-1.2-.5l-.8-3c-.1-.5.2-1 .7-1.2l18.2-7c.3-.1.6-.1.9.1z"/></svg>
+      </a>
     </div>
+  </div>
 
-</div>
+  <script>
+    // Spotlight follows mouse; on touch, disable (since "with mouse only")
+    const root = document.documentElement;
 
+    function move(e){
+      root.style.setProperty('--x', e.clientX + 'px');
+      root.style.setProperty('--y', e.clientY + 'px');
+    }
+
+    window.addEventListener('mousemove', move, {passive:true});
+
+    // hide spotlight on touch
+    window.addEventListener('touchstart', () => {
+      root.style.setProperty('--x', '-500px');
+      root.style.setProperty('--y', '-500px');
+    }, {passive:true});
+  </script>
 </body>
 </html>
