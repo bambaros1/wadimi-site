@@ -18,10 +18,12 @@
       --purple:#8e63ff;
       --purple2:#7d56ff;
 
-      /* spotlight */
-      --x:-200px;
-      --y:-200px;
-      --r:170px;   /* radius */
+      /* spotlight position */
+      --x:-500px;
+      --y:-500px;
+
+      /* ✅ Spotlight size: كان 170px -> دابا ضعف */
+      --r:340px;
     }
 
     *{box-sizing:border-box}
@@ -29,14 +31,12 @@
     body{
       margin:0;
       font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1200px 900px at 20% 30%, rgba(255,255,255,.03), transparent 55%),
-                  radial-gradient(800px 600px at 70% 80%, rgba(142,99,255,.06), transparent 60%),
-                  var(--bg);
       color:var(--text);
       overflow-x:hidden;
+      background: var(--bg);
     }
 
-    /* Flashlight layer: reveals ONLY under cursor */
+    /* ✅ Flashlight layer: الصورة كتظهر غير داخل الدائرة */
     body::before{
       content:"";
       position:fixed;
@@ -45,51 +45,53 @@
       background-size:cover;
       background-position:center;
       filter:saturate(1.05) contrast(1.03);
-      opacity:.95;
+      opacity:.98;
       pointer-events:none;
       z-index:0;
 
-      /* show image only inside the circle */
       -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
         rgba(0,0,0,1) 0%,
-        rgba(0,0,0,1) 35%,
-        rgba(0,0,0,0) 72%);
+        rgba(0,0,0,1) 38%,
+        rgba(0,0,0,0) 74%);
       mask-image: radial-gradient(circle var(--r) at var(--x) var(--y),
         rgba(0,0,0,1) 0%,
-        rgba(0,0,0,1) 35%,
-        rgba(0,0,0,0) 72%);
+        rgba(0,0,0,1) 38%,
+        rgba(0,0,0,0) 74%);
     }
 
-    /* Darken everything overall (so outside spotlight stays black) */
+    /* ✅ خلي خارج الدائرة أسود */
     body::after{
       content:"";
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.86);
+      background:rgba(0,0,0,.88);
       pointer-events:none;
       z-index:0;
     }
 
-    /* Subtle ring glow of flashlight */
+    /* ✅ Glow رقيق حول الدائرة */
     .spot-glow{
       position:fixed;
       inset:0;
       pointer-events:none;
       z-index:1;
       background:
-        radial-gradient(circle calc(var(--r) + 26px) at var(--x) var(--y),
-          rgba(142,99,255,.10) 0%,
-          rgba(142,99,255,.06) 32%,
-          rgba(0,0,0,0) 70%);
+        radial-gradient(circle calc(var(--r) + 38px) at var(--x) var(--y),
+          rgba(142,99,255,.14) 0%,
+          rgba(142,99,255,.08) 36%,
+          rgba(0,0,0,0) 72%);
       mix-blend-mode:screen;
-      opacity:.55;
+      opacity:.6;
     }
 
+    /* ✅ عرض طبيعي ديال المواقع + وسط الشاشة */
     .wrap{
       position:relative;
       z-index:2;
       min-height:100%;
-      padding:40px 56px 28px;
+      max-width:1200px;
+      margin:0 auto;
+      padding:40px 18px 28px;
     }
 
     /* Top bar */
@@ -108,9 +110,8 @@
       box-shadow:0 18px 45px rgba(0,0,0,.55);
       background:#0e0e0e;
       border:1px solid rgba(255,255,255,.06);
+      flex:0 0 auto;
     }
-
-    /* simple landscape placeholder like screenshot */
     .logo svg{width:100%;height:100%;display:block}
 
     nav{
@@ -118,6 +119,7 @@
       gap:44px;
       align-items:center;
       padding-top:6px;
+      flex:0 0 auto;
     }
 
     .pill{
@@ -127,6 +129,7 @@
       border-radius:12px;
       font-weight:700;
       box-shadow:0 10px 24px rgba(142,99,255,.25);
+      border:1px solid rgba(255,255,255,.08);
     }
     nav a{
       color:#fff;
@@ -179,7 +182,7 @@
       border:1px solid rgba(255,255,255,.08);
     }
 
-    /* Right big shape */
+    /* Right shape */
     .shape{
       width:min(520px, 100%);
       aspect-ratio: 1 / 1;
@@ -188,8 +191,6 @@
       overflow:hidden;
       box-shadow:0 22px 70px rgba(0,0,0,.62);
       border:1px solid rgba(255,255,255,.08);
-
-      /* make it “rounded hex-ish” like screenshot */
       clip-path: polygon(
         14% 6%,
         72% 6%,
@@ -225,22 +226,45 @@
     }
     .ic svg{width:16px;height:16px;fill:#fff;opacity:.95}
 
-    /* responsive */
+    /* ✅ Responsive */
     @media (max-width: 980px){
-      .wrap{padding:26px 22px 22px}
-      .main{grid-template-columns:1fr; margin-top:28px}
-      .left h1{font-size:62px}
-      nav{gap:22px}
-      .shape{margin:28px auto 0}
+      .main{
+        grid-template-columns:1fr;
+        margin-top:28px;
+        gap:28px;
+      }
+      .left h1{font-size:56px}
+      nav{gap:16px}
+      .shape{
+        margin:18px auto 0;
+        width:min(460px, 92vw);
+      }
+      /* Spotlight أصغر شوية فالموبايل باش يبقى طبيعي */
+      :root{ --r:260px; }
+    }
+
+    @media (max-width: 560px){
+      .top{align-items:center}
+      nav{gap:12px}
+      nav a{font-size:14px}
+      .pill{padding:10px 16px; border-radius:12px}
+      .left h1{font-size:46px}
+      .left p{font-size:15px; line-height:1.8}
+      .btn{height:48px}
+      .logo{width:140px; height:78px}
+
+      :root{ --r:220px; }
     }
   </style>
 </head>
+
 <body>
   <div class="spot-glow"></div>
 
   <div class="wrap">
     <div class="top">
       <div class="logo" aria-label="logo">
+        <!-- placeholder landscape like screenshot -->
         <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -311,7 +335,7 @@
   </div>
 
   <script>
-    // Spotlight follows mouse; on touch, disable (since "with mouse only")
+    // Spotlight follows mouse (only). On touch: hide.
     const root = document.documentElement;
 
     function move(e){
@@ -319,13 +343,13 @@
       root.style.setProperty('--y', e.clientY + 'px');
     }
 
-    window.addEventListener('mousemove', move, {passive:true});
+    window.addEventListener('mousemove', move, { passive:true });
 
-    // hide spotlight on touch
+    // hide on touch devices
     window.addEventListener('touchstart', () => {
       root.style.setProperty('--x', '-500px');
       root.style.setProperty('--y', '-500px');
-    }, {passive:true});
+    }, { passive:true });
   </script>
 </body>
 </html>
